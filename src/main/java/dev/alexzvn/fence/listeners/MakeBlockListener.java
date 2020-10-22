@@ -14,6 +14,11 @@ public class MakeBlockListener implements Listener {
     public void generateStoneLiquid(BlockFromToEvent event) {
         Block flowBlock = event.getToBlock();
 
+        if (
+            ! isSkyworld(flowBlock.getWorld()) ||
+            ! isWater(event.getBlock())
+        ) return;
+
         if (this.shoudTranformLiquidToBlock(flowBlock)) {
             event.setCancelled(true);
             this.replaceBlock(flowBlock);
@@ -21,12 +26,6 @@ public class MakeBlockListener implements Listener {
     }
 
     protected boolean shoudTranformLiquidToBlock(Block block) {
-
-        if (
-            ! this.isSkyworld(block.getWorld()) ||
-            ! block.getType().equals(Material.WATER)
-        ) return false;
-
         String[] faces = {"DOWN", "EAST", "WEST", "SOUTH", "NORTH"};
 
         for (String face : faces) {
@@ -54,5 +53,9 @@ public class MakeBlockListener implements Listener {
 
     protected boolean isFence(Block block) {
         return block.getType().name().endsWith("FENCE");
+    }
+
+    protected boolean isWater(Block block) {
+        return block.getType().name().equals("WATER");
     }
 }
