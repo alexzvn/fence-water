@@ -1,6 +1,5 @@
 package dev.alexzvn.fence.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -14,8 +13,6 @@ public class MakeBlockListener implements Listener {
     @EventHandler
     public void generateStoneLiquid(BlockFromToEvent event) {
         Block flowBlock = event.getToBlock();
-
-        Bukkit.broadcastMessage(flowBlock.getType().toString());
 
         if (this.shoudTranformLiquidToBlock(flowBlock)) {
             event.setCancelled(true);
