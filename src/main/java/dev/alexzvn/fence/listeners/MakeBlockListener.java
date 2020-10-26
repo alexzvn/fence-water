@@ -48,7 +48,7 @@ public class MakeBlockListener implements Listener {
     }
 
     protected boolean isSkyworld(World world) {
-        return world.getName().startsWith("bskyblock_world");
+        return world.getName().startsWith("ASkyBlock");
     }
 
     protected boolean isFence(Block block) {
