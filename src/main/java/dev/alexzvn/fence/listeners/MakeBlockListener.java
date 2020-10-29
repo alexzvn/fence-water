@@ -56,6 +56,6 @@ public class MakeBlockListener implements Listener {
     }
 
     protected boolean isWater(Block block) {
-        return block.getType().name().equals("WATER");
+        return block.getType().name().endsWith("WATER");
     }
 }
