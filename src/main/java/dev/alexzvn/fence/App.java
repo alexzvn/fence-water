@@ -10,20 +10,22 @@ public class App extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // TODO Auto-generated method stub
 
-        this.registerEvent(new MakeBlockListener());
+        this.saveDefaultConfig();
+
+        this.registerEvent(
+            new MakeBlockListener(this.getConfig())
+        );
     }
 
     @Override
     public void onDisable() {
-        // TODO Auto-generated method stub
-
         
     }
 
     protected void registerEvent(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, this);
+
         this.getServer().getPluginManager().registerEvents(listener, this);
     }
 }

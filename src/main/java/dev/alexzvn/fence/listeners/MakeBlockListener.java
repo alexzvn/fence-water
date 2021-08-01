@@ -1,21 +1,41 @@
 package dev.alexzvn.fence.listeners;
 
-import org.bukkit.Material;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
+import dev.alexzvn.fence.Roll;
+
 public class MakeBlockListener implements Listener {
+
+    protected FileConfiguration config;
+
+    protected Map<String, Roll> worldRoll = new HashMap<String, Roll>();
+
+    public MakeBlockListener(FileConfiguration config) {
+        this.config = config;
+
+        Set<String> worlds = config.getConfigurationSection("worlds").getKeys(false);
+
+        for (String world : worlds) {
+            worldRoll.put(world, new Roll(config, world));
+        }
+    }
 
     @EventHandler
     public void generateStoneLiquid(BlockFromToEvent event) {
         Block flowBlock = event.getToBlock();
 
         if (
-            ! isSkyworld(flowBlock.getWorld()) ||
+            ! isAllowed(flowBlock.getWorld()) ||
             ! isWater(event.getBlock())
         ) return;
 
@@ -44,11 +64,13 @@ public class MakeBlockListener implements Listener {
             block.getX(),
             block.getY(),
             block.getZ()
-        ).setType(Material.COBBLESTONE);
+        ).setType(
+            worldRoll.get(block.getWorld().getName()).material()
+        );
     }
 
-    protected boolean isSkyworld(World world) {
-        return world.getName().startsWith("ASkyBlock");
+    protected boolean isAllowed(World world) {
+        return worldRoll.containsKey(world.getName());
     }
 
     protected boolean isFence(Block block) {
