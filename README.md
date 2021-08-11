@@ -1,4 +1,4 @@
-# fence-water
+# Water Ore Generator
 Ore generator common use for skyblock spigot/paper
 
 ## Install
