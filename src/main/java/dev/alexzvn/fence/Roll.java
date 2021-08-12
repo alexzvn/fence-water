@@ -31,14 +31,14 @@ public class Roll {
     }
 
     protected void init() {
-        int carry = 0;
+        total = 0;
 
         Set<String> blocks = this.config.getConfigurationSection("worlds." + this.world).getKeys(false);
 
         for (String name : blocks) {
-            carry += this.config.getDouble("worlds." + this.world + "." + name);
+            total += this.config.getDouble("worlds." + this.world + "." + name);
 
-            this.blocks.put(name, carry);
+            this.blocks.put(name, total);
         }
 
         this.blocks = sortByValue(this.blocks);
