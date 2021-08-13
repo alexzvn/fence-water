@@ -4,8 +4,8 @@ fallback_block: COBBLESTONE
 worlds:
 
   world:
-    COBBLESTONE: 30
-    IRON_ORE: 20
-    GOLD_ORE: 20
+    COBBLESTONE: 300000
+    IRON_ORE: 1000
+    GOLD_ORE: 100
     COAL_ORE: 20
-    DIAMOND_ORE: 10
+    DIAMOND_ORE: 1

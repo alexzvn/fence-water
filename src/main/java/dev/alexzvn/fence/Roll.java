@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,9 +19,9 @@ public class Roll {
 
     protected String world;
 
-    protected HashMap<String, Integer> blocks = new HashMap<String, Integer>();
+    protected Map<String, Integer> blocks = new HashMap<String, Integer>();
 
-    protected int total;
+    protected Integer total = 0;
 
     public Roll(FileConfiguration config, String name) {
         this.config = config;
@@ -31,22 +31,28 @@ public class Roll {
     }
 
     protected void init() {
-        total = 0;
-
         Set<String> blocks = this.config.getConfigurationSection("worlds." + this.world).getKeys(false);
 
-        for (String name : blocks) {
-            total += this.config.getDouble("worlds." + this.world + "." + name);
+        this.blocks = sortByValue(mapBlocks(blocks));
+    }
 
-            this.blocks.put(name, total);
+    protected HashMap<String, Integer> mapBlocks(Set<String> blockNames) {
+        HashMap<String, Integer> blocks = new HashMap<>();
+
+        for (String name : blockNames) {
+            total += this.config.getInt("worlds." + this.world + "." + name);
+
+            blocks.put(name, total);
         }
 
-        this.blocks = sortByValue(this.blocks);
+        return blocks;
     }
 
     public Material material() {
+        int random = random();
+
         for (String material : blocks.keySet()) {
-            if (blocks.get(material) >= this.random()) {
+            if (blocks.get(material) >= random) {
                 return Material.valueOf(material);
             }
         }
@@ -55,11 +61,7 @@ public class Roll {
     }
 
     protected Integer random() {
-        int min = 0, max = total;
-
-        Random rand = new Random();
-
-        return (int) ((min + (max - min) * rand.nextDouble()));
+        return ThreadLocalRandom.current().nextInt(0, total + 1);
     }
 
     public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
@@ -82,6 +84,7 @@ public class Roll {
         for (Map.Entry<String, Integer> aa : list) {
             temp.put(aa.getKey(), aa.getValue());
         }
+
         return temp;
     }
 }
