@@ -2,5 +2,4 @@ name: FenceWater
 main: dev.alexzvn.fence.App
 
 author: Alexzvn
-descriptions: Addon for BentoBox
-version: 0.0.1
+version: ${project.basedir}
